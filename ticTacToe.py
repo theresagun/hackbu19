@@ -1,5 +1,6 @@
 import pygame
 import sys
+import random
 
 white = (255, 255, 255)
 
@@ -127,44 +128,65 @@ def main():
 
     #main loop
     while True:
+#        print("hey")
         #set background to white
         screen.fill([255,255,255])
 
         for event in pygame.event.get():
+#            print(event)
             if event.type == pygame.QUIT:
                 sys.exit()
-            #if not player's turn
-            if not heartsTurn:
-                #TODO make npc
-                print("not ur turn")
-                print(kissNPC.sprites())
-                heartsTurn = True
-            #if player's turn
-            elif event.type == pygame.MOUSEBUTTONUP:
+            if event.type == pygame.MOUSEBUTTONUP:
                 #get position of mouse, clicked = list of all sprites under cursor
                 pos = pygame.mouse.get_pos()
                 clicked = [s for s in allSprites if s.rect.collidepoint(pos)]
                 #check if spot already clicked by either hearts or kisses
-                print(clicked)
                 hCol = []
                 kCol = []
                 for s in clicked:
-#                    print("in for loop")
                     hCol.append(pygame.sprite.spritecollide(s,hearts,dokill=False))
-#                    print(hCol)
                     kCol.append(pygame.sprite.spritecollide(s,kisses,dokill=False))
-#                    print(kCol)
                 #if not clicked
                 if(hCol == [[],[]] and kCol == [[],[]]):
 #                    print("in if")
-                    #if hearts turn - might not need this, can check earlier if hearts
-#                    if heartsTurn:
                     #find heart sprite and add to group
                     for s in clicked:
                         if type(s) == Heart:
                             hearts.add(s)
                             s.onScreen = True
+#                            print("worked")
                 heartsTurn = False
+
+#                print("here")
+            #if player's turn
+#                if not heartsTurn:
+#                    print("not ur turn")
+#                    print(kissNPC.sprites())
+            elif event.type == pygame.MOUSEMOTION:
+                if not heartsTurn:
+                    kissList = kissNPC.sprites()
+                    while not heartsTurn:
+                        kissSpr = kissList[random.randint(0,len(kissList)-1)]
+                        collisions = pygame.sprite.spritecollide(kissSpr,hearts,dokill=False)
+                        if(collisions == []):
+
+#                        hCol = []
+#                        kCol = []
+#                        print("while")
+#                        for s in clicked:
+#                            hCol.append(pygame.sprite.spritecollide(s,hearts,dokill=False))
+#                            print(hCol)
+#                            print()
+#                            kCol.append(pygame.sprite.spritecollide(s,kisses,dokill=False))
+#                               print(kCol)
+                        #if not clicked
+#                        if(hCol == [[],[]] and kCol == [[],[]]):
+#                            print("in if")
+                            #add kiss to group
+                            kisses.add(kissSpr)
+                            kissNPC.remove(kissSpr)
+                            heartsTurn = True
+
         #background set up
         bg = pygame.Surface(screen.get_size()).convert()
         bg = pygame.image.load('ticTacToeBoard.png')
