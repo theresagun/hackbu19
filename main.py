@@ -164,18 +164,14 @@ class Controller:
                     end=False
                 if event.type == pygame.KEYDOWN:
                     if event.key==pygame.K_SPACE:
-                        #ticTacToe.main()
                         self.play=True
-                        #self.character.moveAhead()
 
             self.screen=pygame.display.set_mode((1000, 700))
-            #self.character.moveAhead()
 
             white=pygame.image.load("white.jpg")
             white=pygame.transform.scale(white, (1000, 1000))
             self.screen.blit(white, (0,0))
 
-            #self.background=pygame.image.load("heart1.gif")
             self.background=pygame.image.load(self.character.bgPic)
             self.screen.blit(pygame.transform.scale(self.background, (800, 550)), (100,75))
 
@@ -206,7 +202,6 @@ class Controller:
             self.screen.blit(rangeChoose3, (630, 410))
 
             #score
-            #aScore="Score:"
             rangeFont1=pygame.font.SysFont("Calibri", 40, True, False)
             score=rangeFont1.render("Score: ", False, BLACK)
             scoreN=rangeFont1.render(str(self.score), False, PINK)
@@ -221,20 +216,19 @@ class Controller:
             self.screen.blit(pygame.transform.scale(rose1, (230, 190)), (10, 500))
             self.screen.blit(pygame.transform.scale(rose2, (230, 190)), (760, 500))
 
-
-
             if(self.play==True and (self.character.position==0 or self.character.position==3)):
-                print(self.character.position)
                 self.character.position+=1
-                self.score=ticTacToe.main()
-#            elif(self.play==True and self.character.position==1 self.character.position==4):
-#                self.score=trivia.main()
-#            elif(self.play==True and self.character.position==2 self.character.position==5):
-#                self.score=trivia.main()
+                self.score+=ticTacToe.main()
+            elif(self.play==True and (self.character.position==1 or self.character.position==4)):
+                self.character.position+=1
+                self.score+=ticTacToe.main()
+            elif(self.play==True and (self.character.position==2 or self.character.position==5)):
+                self.character.position+=1
+                self.score+=ticTacToe.main()
             self.character.moveAhead()
             self.play=False
 
-            if(self.score>=0 and self.score<=2):
+            if(self.score>=0 and self.score<=1):
                 if(self.character.gender==0):
                     self.lover="Shrek"
                     self.loverPic="shrek.jpg"
@@ -248,7 +242,7 @@ class Controller:
                 else:
                     self.lover="Katy Perry"
                     self.loverPic="katy.jpg"
-            elif(self.score>4 and self.score<=6):
+            elif(self.score>4 and self.score<=5):
                 if(self.character.gender==0):
                     self.lover="Zac Efron"
                     self.loverPic="zac.jpg"
@@ -270,7 +264,10 @@ class Controller:
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
                     end=False
-
+                if event.type == pygame.KEYDOWN:
+                    if event.key==pygame.K_SPACE:
+                        self.reset()
+                        self.goToBoard()
             self.screen=pygame.display.set_mode((self.width, self.height-50))
             self.background=pygame.image.load("endScreen.jpg")
             self.screen.blit(pygame.transform.scale(self.background, (self.width, self.height-50)), (0,0))
@@ -296,7 +293,9 @@ class Controller:
         pygame.quit()
 
 
-
+    def reset(self):
+        self.score=0
+        self.character.position=0
 
 
 
