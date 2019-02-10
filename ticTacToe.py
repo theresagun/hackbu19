@@ -97,9 +97,9 @@ def main():
         y += 133
 
     heartsTurn = True
-
+    end = -1
     #main loop
-    while True:
+    while end == -1:
         #set background to white
         screen.fill([255,255,255])
 
@@ -151,7 +151,8 @@ def main():
         (((0,266) in posListK) and ((133,266) in posListK) and ((266,266) in posListK)) or\
         (((0,0) in posListK) and ((133,133) in posListK) and ((266,266) in posListK)) or\
         (((0,266) in posListK) and ((133,133) in posListK) and ((266,0) in posListK))):
-            return NPC_WIN
+#            return NPC_WIN
+            end = NPC_WIN
 
 
         #check when there are three hearts in a row/diagonal/column
@@ -167,7 +168,8 @@ def main():
         (((0,266) in posListH) and ((133,266) in posListH) and ((266,266) in posListH)) or\
         (((0,0) in posListH) and ((133,133) in posListH) and ((266,266) in posListH)) or\
         (((0,266) in posListH) and ((133,133) in posListH) and ((266,0) in posListH))):
-            return PLAYER_WIN
+#            return PLAYER_WIN
+            end = PLAYER_WIN
 
         #check if all tiles filled
         if(((0,0) in posListH or (0,0) in posListK) and ((0,133) in posListH or (0,133) in posListK) and\
@@ -175,7 +177,8 @@ def main():
         ((133,133) in posListH or (133,133) in posListK) and ((133,266) in posListH or (133,266) in posListK) and\
         ((266,0) in posListH or (266,0) in posListK) and ((266,133) in posListH or (266,133) in posListK) and\
         ((266,266) in posListH or (266,266) in posListK)):
-            return TIE
+#            return TIE
+            end = TIE
 
         #background set up
         bg = pygame.Surface(screen.get_size()).convert()
@@ -189,6 +192,31 @@ def main():
         #draw sprites onto screen
         hearts.draw(screen)
         kisses.draw(screen)
+
+        pygame.display.flip()
+    kateSmells = True
+    while(kateSmells):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                kateSmells = False
+        #make screen
+        screen = pygame.display.set_mode([400,400])
+        screen.fill([255,105,180])
+
+        #words!
+        endFont = pygame.font.SysFont('Calibri',40,True,False)
+        if end == PLAYER_WIN:
+            endFont = endFont.render('YOU WON', False, (255,255,255))
+        elif end == NPC_WIN:
+            endFont = endFont.render('YOU LOST', False, (255,255,255))
+        else:
+            endFont = endFont.render('TIE GAME', False, (255,255,255))
+        #put on screen
+        width = endFont.get_width()
+        wCoor = (400 - width) / 2
+        height = endFont.get_height()
+        hCoor = (400 - height) / 2
+        screen.blit(endFont, (wCoor,hCoor))
 
         pygame.display.flip()
 
