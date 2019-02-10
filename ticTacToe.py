@@ -18,10 +18,7 @@ class Heart(pygame.sprite.Sprite):
         '''
         #parent constructor
         super().__init__()
-        #create image w/ width and height
-#        self.height = 130
-#        self.width = 130
-#        self.image = pygame.Surface([self.width,self.height])
+        #create image
         self.image = pygame.image.load(image).convert_alpha()
         self.image = pygame.transform.scale(self.image, (130,130)).convert_alpha()
         #get rectangle object
@@ -29,11 +26,6 @@ class Heart(pygame.sprite.Sprite):
         #set coordinates
         self.rect.x = xCoor
         self.rect.y = yCoor
-
-        #put image on screen
-#        pygame.Surface.blit('pinkHeart.png',screen,self.rect)
-        #change to true when blit
-        self.onScreen = False
 
 class Kiss(pygame.sprite.Sprite):
     '''
@@ -46,21 +38,14 @@ class Kiss(pygame.sprite.Sprite):
         '''
         #parent constructor
         super().__init__()
-        #create image w/ width and height
+        #create image
         self.image = pygame.image.load(image).convert_alpha()
         self.image = pygame.transform.scale(self.image, (130,130)).convert_alpha()
-
-#        self.image = pygame.Surface(130,130)
         #get rectangle object
         self.rect = self.image.get_rect()
         #set coordinates
         self.rect.x = xCoor
         self.rect.y = yCoor
-        #put image on screen
-#        pygame.Surface.blit('lips.png',screen,self.rect)
-        #change to true when blit
-        self.onScreen = False
-
 
 class Background(pygame.sprite.Sprite):
     '''
@@ -83,15 +68,7 @@ def main():
     #create 400x400 screen
     screen = pygame.display.set_mode([400,400])
     #create surface
-#    background = pygame.Surface(screen.get_size())
-    #load image
-    #bg = Background('ticTacToeBoard.png', [0,0])
     bg = pygame.Surface(screen.get_size()).convert()
-    ###potentially next two lines go in while loop
-    #set background to white
-#    screen.fill([255,255,255])
-    #blit background
-#    screen.blit(bg.image, bg.rect)
 
     #load images
     heartPic = 'pinkHeart.png'
@@ -102,14 +79,11 @@ def main():
     hearts = pygame.sprite.Group()
     kisses = pygame.sprite.Group()
     allSprites = pygame.sprite.Group()
-#    sprites.add(hearts)
-#    sprites.add(kisses)
 
     #make kiss sprites for comp to use
     kissNPC = pygame.sprite.Group()
+
     #create hearts and kisses
-#    heart1 = Heart(130,0,screen,heartPic)
-#    x = 0
     y = 0
     for row in range(3):
         x = 0
@@ -121,20 +95,15 @@ def main():
 
             x += 133
         y += 133
-    #game outcomes
-#    gameOver = False
-#    score = -1
-    #whose turn - update this at end of loop
+
     heartsTurn = True
 
     #main loop
     while True:
-#        print("hey")
         #set background to white
         screen.fill([255,255,255])
 
         for event in pygame.event.get():
-#            print(event)
             if event.type == pygame.QUIT:
                 sys.exit()
             if event.type == pygame.MOUSEBUTTONUP:
@@ -149,20 +118,13 @@ def main():
                     kCol.append(pygame.sprite.spritecollide(s,kisses,dokill=False))
                 #if not clicked
                 if(hCol == [[],[]] and kCol == [[],[]]):
-#                    print("in if")
                     #find heart sprite and add to group
                     for s in clicked:
                         if type(s) == Heart:
                             hearts.add(s)
                             s.onScreen = True
-#                            print("worked")
                 heartsTurn = False
 
-#                print("here")
-            #if player's turn
-#                if not heartsTurn:
-#                    print("not ur turn")
-#                    print(kissNPC.sprites())
             elif event.type == pygame.MOUSEMOTION:
                 if not heartsTurn:
                     kissList = kissNPC.sprites()
@@ -170,19 +132,6 @@ def main():
                         kissSpr = kissList[random.randint(0,len(kissList)-1)]
                         collisions = pygame.sprite.spritecollide(kissSpr,hearts,dokill=False)
                         if(collisions == []):
-
-#                        hCol = []
-#                        kCol = []
-#                        print("while")
-#                        for s in clicked:
-#                            hCol.append(pygame.sprite.spritecollide(s,hearts,dokill=False))
-#                            print(hCol)
-#                            print()
-#                            kCol.append(pygame.sprite.spritecollide(s,kisses,dokill=False))
-#                               print(kCol)
-                        #if not clicked
-#                        if(hCol == [[],[]] and kCol == [[],[]]):
-#                            print("in if")
                             #add kiss to group
                             kisses.add(kissSpr)
                             kissNPC.remove(kissSpr)
@@ -210,7 +159,6 @@ def main():
         posListH = []
         for h in heartList:
             posListH.append((h.rect.x,h.rect.y))
-#        print(posListH)
         if((((0,0) in posListH) and ((0,133) in posListH) and ((0,266) in posListH)) or\
         (((0,0) in posListH) and ((133,0) in posListH) and ((266,0) in posListH)) or\
         (((133,0) in posListH) and ((133,133) in posListH) and ((133,266) in posListH)) or\
@@ -219,7 +167,6 @@ def main():
         (((0,266) in posListH) and ((133,266) in posListH) and ((266,266) in posListH)) or\
         (((0,0) in posListH) and ((133,133) in posListH) and ((266,266) in posListH)) or\
         (((0,266) in posListH) and ((133,133) in posListH) and ((266,0) in posListH))):
-#            score = PLAYER_WIN
             return PLAYER_WIN
 
         #check if all tiles filled
@@ -242,10 +189,6 @@ def main():
         #draw sprites onto screen
         hearts.draw(screen)
         kisses.draw(screen)
-#        print()
-#        allSprites.draw(screen)
-#        hearts.blit()
-#        kisses.blit()
 
         pygame.display.flip()
 
