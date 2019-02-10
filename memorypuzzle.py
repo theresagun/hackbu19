@@ -2,8 +2,8 @@
 import random, pygame, sys
 from pygame.locals import *
 
-windowWidth = 430 # size of window's width in pixels
-windowHeight = 325 # size of windows' height in pixels
+windowWidth = 450 # size of window's width in pixels
+windowHeight = 390 # size of windows' height in pixels
 boxSize = 100 # size of box height & width in pixels
 gapSize = 10 # size of gap between boxes in pixels
 boardWidth = 4 # number of columns of icons
@@ -25,6 +25,8 @@ heart5 = 'heart5.jpg'
 heart6 = 'heart6.jpg'
 coverphoto = 'cover.jpg'
 allSprites = pygame.sprite.Group()
+#totalClicks = 0
+
 
 class Tile(pygame.sprite.Sprite):
     def __init__(self, xCoor, yCoor):
@@ -37,7 +39,7 @@ class Tile(pygame.sprite.Sprite):
         self.rect.y = yCoor
         self.revealed = False
 
-    def randomize():
+    def randomize(self):
         mylist = [1, 1, 2, 2, 3, 3, 4 , 4, 5, 5, 6, 6]
         random.shuffle(mylist)
         board = []
@@ -57,8 +59,14 @@ class Tile(pygame.sprite.Sprite):
                     revealedImg = heart5
                 else:
                     revealedImg = heart6
-                collumb.append(revealedImg)
+                column.append(revealedImg)
+                del mylist[0]
+            board.append(column)
+        print(board)
 
+        #def getImage(spr):
+
+        #def reveal(spr):
 
 
 
@@ -70,19 +78,22 @@ class Board:
         self.screen = pygame.display.set_mode((self.width, self.height))
         self.caption = pygame.display.set_caption("Memory Puzzle")
         self.background = pygame.Surface(self.screen.get_size()).convert()
-        self.screen.fill(BGColor)
+        self.background = self.screen.fill(BGColor)
         bg = pygame.Surface(self.screen.get_size()).convert()
-        self.screen.blit(pygame.transform.scale(bg, (430,325)), (0,0))
+        self.screen.blit(pygame.transform.scale(bg, (0,0)), (0,0))
         #images set up
         cover = pygame.image.load(coverphoto).convert_alpha()
         cover = pygame.transform.scale(cover, (100,100))
+
+        self.totalClicks = 0
+        self.points = 0
         #kiss = pygame.image.load(kissPic).convert_alpha()
         #kiss = pygame.transform.scale(kiss, (130,130))
         #draw sprites onto screen
 
-        y = 0
+        y = 60
         for row in range(3):
-            x = 0
+            x = 10
             for col in range(4):
                 allSprites.add(Tile(x,y))
                 #left = box_x * (boxSize + gapSize) + xMargin
@@ -91,15 +102,28 @@ class Board:
             y += 110
 
         allSprites.draw(self.screen)
-        #cover.draw(self.screen)
-        #kisses.draw(screen)
-#        print()
-#        allSprites.draw(screen)
-#        hearts.blit()
-#        kisses.blit()
-
         pygame.display.flip()
-    def getAllSprites():
+
+    def printClicks(self):
+        #self.screen.fill(BGColor)
+        Board()
+        clicksFont = pygame.font.SysFont("Calibri", 20, True, False)
+        clicks = clicksFont.render("Clicks Remaining: ", False, WHITE)
+        clickvar = clicksFont.render(str(20- self.totalClicks),False, WHITE)
+        self.screen.blit(clicks, (10,10))
+        self.screen.blit(clickvar, (10,30))
+        pygame.display.flip()
+
+    def printPoints(self):
+        Board()
+        pointsFont = pygame.fint.SysFont("Calibri", 20, True, False)
+        points = pointsFont.render("Points: ", False, WHITE)
+        pointsvar = pointsFont.render(str(points), False, WHITE)
+        self.screen.blit(points, (200,10))
+        self.screen.blit(pointsvar, (200,30))
+        pygame.display.flip()
+
+    def getAllSprites(self):
         return allSprites
 
 
@@ -115,21 +139,22 @@ def main():
     cursorx = 0
     cursory = 0
     running = True
-    totalClicks = 0
+    #totalClicks = 0
     while running:
-        if (totalClicks == 20):
+        if (screen.totalClicks == 20):
             running = False
+            #totalClicks = 0
             break
             #easygui.msgbox("You're out of time! Your score was " + score, title = "Game Over!")
         else:
             ev = pygame.event.get()
             numClicks = 0
-            points = 0
             for event in ev:
                 if event.type == pygame.QUIT:
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONUP:
-                    totalClicks += 1
+                    screen.totalClicks += 1
+                    screen.printClicks()
                     numClicks += 1
                     pos = pygame.mouse.get_pos()
                     clicked_sprites = [s for s in allSprites if s.rect.collidepoint(pos)]
@@ -140,10 +165,11 @@ def main():
                     if numClicks == 2:
                         numClicks = 0
                         if temp == s:
-                            points += 1
+                            screen.points += 1
                             s.revealed = True
                             temp.revealed = True
                             revealedBoxes.add(s)
                             revealedBoxes.add(temp)
+
 
 main()
