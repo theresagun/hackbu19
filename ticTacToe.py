@@ -207,8 +207,8 @@ def main():
 
         #words!
         endFont = pygame.font.SysFont('Calibri',40,True,False)
-        dir = pygame.font.SysFont('Calibri',40,True,False)
-        dir2 = pygame.font.SysFont('Calibri',40,True,False)
+        dir = pygame.font.SysFont('Calibri',30,True,False)
+        dir2 = pygame.font.SysFont('Calibri',30,True,False)
 
         if end == PLAYER_WIN:
             endFont = endFont.render('YOU WON', False, (255,255,255))
@@ -226,6 +226,7 @@ def main():
         screen.blit(endFont, (wCoor,hCoor))
         width = dir.get_width()
         wCoor = (400 - width) / 2
+        screen.blit(dir, (wCoor, hCoor + 50))
         width = dir2.get_width()
         wCoor = (400 - width) / 2
         screen.blit(dir2, (wCoor, hCoor + 100))
