@@ -2,7 +2,10 @@ import pygame
 import sys
 import random
 
-white = (255, 255, 255)
+#WHITE = (255, 255, 255)
+PLAYER_WIN = 1
+NPC_WIN = 0
+TIE = 0
 
 class Heart(pygame.sprite.Sprite):
     '''
@@ -26,6 +29,7 @@ class Heart(pygame.sprite.Sprite):
         #set coordinates
         self.rect.x = xCoor
         self.rect.y = yCoor
+
         #put image on screen
 #        pygame.Surface.blit('pinkHeart.png',screen,self.rect)
         #change to true when blit
@@ -94,7 +98,7 @@ def main():
     kissPic = 'lips.png'
 
 
-    #create sprite lists
+    #create sprite groups
     hearts = pygame.sprite.Group()
     kisses = pygame.sprite.Group()
     allSprites = pygame.sprite.Group()
@@ -118,11 +122,8 @@ def main():
             x += 133
         y += 133
     #game outcomes
-    gameOver = False
-    playerWin = False
-    computerWin = False
-    tie = False
-
+#    gameOver = False
+#    score = -1
     #whose turn - update this at end of loop
     heartsTurn = True
 
@@ -186,6 +187,48 @@ def main():
                             kisses.add(kissSpr)
                             kissNPC.remove(kissSpr)
                             heartsTurn = True
+
+
+        #check when there are three kisses in a row/diagonal/column
+        kissList = kisses.sprites()
+        posListK = []
+        for k in kissList:
+            posListK.append((k.rect.x,k.rect.y))
+        if((((0,0) in posListK) and ((0,133) in posListK) and ((0,266) in posListK)) or \
+        (((0,0) in posListK) and ((133,0) in posListK) and ((266,0) in posListK)) or \
+        (((133,0) in posListK) and ((133,133) in posListK) and ((133,266) in posListK)) or \
+        (((0,133) in posListK) and ((133,133) in posListK) and ((266,133) in posListK)) or \
+        (((266,0) in posListK) and ((266,133) in posListK) and ((266,266) in posListK)) or\
+        (((0,266) in posListK) and ((133,266) in posListK) and ((266,266) in posListK)) or\
+        (((0,0) in posListK) and ((133,133) in posListK) and ((266,266) in posListK)) or\
+        (((0,266) in posListK) and ((133,133) in posListK) and ((266,0) in posListK))):
+            return NPC_WIN
+
+
+        #check when there are three hearts in a row/diagonal/column
+        heartList = hearts.sprites()
+        posListH = []
+        for h in heartList:
+            posListH.append((h.rect.x,h.rect.y))
+#        print(posListH)
+        if((((0,0) in posListH) and ((0,133) in posListH) and ((0,266) in posListH)) or\
+        (((0,0) in posListH) and ((133,0) in posListH) and ((266,0) in posListH)) or\
+        (((133,0) in posListH) and ((133,133) in posListH) and ((133,266) in posListH)) or\
+        (((0,133) in posListH) and ((133,133) in posListH) and ((266,133) in posListH)) or\
+        (((266,0) in posListH) and ((266,133) in posListH) and ((266,266) in posListH)) or\
+        (((0,266) in posListH) and ((133,266) in posListH) and ((266,266) in posListH)) or\
+        (((0,0) in posListH) and ((133,133) in posListH) and ((266,266) in posListH)) or\
+        (((0,266) in posListH) and ((133,133) in posListH) and ((266,0) in posListH))):
+#            score = PLAYER_WIN
+            return PLAYER_WIN
+
+        #check if all tiles filled
+        if(((0,0) in posListH or (0,0) in posListK) and ((0,133) in posListH or (0,133) in posListK) and\
+        ((0,266) in posListH or (0,266) in posListK) and ((133,0) in posListH or (133,0) in posListK) and\
+        ((133,133) in posListH or (133,133) in posListK) and ((133,266) in posListH or (133,266) in posListK) and\
+        ((266,0) in posListH or (266,0) in posListK) and ((266,133) in posListH or (266,133) in posListK) and\
+        ((266,266) in posListH or (266,266) in posListK)):
+            return TIE
 
         #background set up
         bg = pygame.Surface(screen.get_size()).convert()
