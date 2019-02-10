@@ -197,6 +197,9 @@ def main():
                             #screen.notRevealed(temp)
                         numClicks = 0
         pygame.display.flip()
+    if screen.points == 6:
+        return 1
+    else: return 0
 
 
-main()
+#main()
