@@ -77,27 +77,33 @@ class Board:
             y += 110
 
         allSprites.draw(self.screen)
-        pygame.display.flip()
+        #pygame.display.flip()
 
 
     def printClicks(self):
         #self.screen.fill(BGColor)
-        Board()
+        #Board()
         clicksFont = pygame.font.SysFont("Calibri", 20, True, False)
+        undo = clicksFont.render(str(19 - self.totalClicks),False, BGColor)
         clicks = clicksFont.render("Clicks Remaining: ", False, WHITE)
         clickvar = clicksFont.render(str(20- self.totalClicks),False, WHITE)
+        self.screen.blit(undo,(10,30))
         self.screen.blit(clicks, (10,10))
         self.screen.blit(clickvar, (10,30))
-        pygame.display.flip()
+
+        #pygame.display.flip()
 
     def printPoints(self):
-        Board()
-        pointsFont = pygame.fint.SysFont("Calibri", 20, True, False)
-        points = pointsFont.render("Points: ", False, WHITE)
-        pointsvar = pointsFont.render(str(points), False, WHITE)
-        self.screen.blit(points, (200,10))
-        self.screen.blit(pointsvar, (200,30))
-        pygame.display.flip()
+        #Board()
+        pointsFont = pygame.font.SysFont("Calibri", 20, True, False)
+        pointy = pointsFont.render("Points: ", False, WHITE)
+        pointsvar = pointsFont.render(str(self.points), False, WHITE)
+        undo = pointsFont.render(str(1- self.points),False, BGColor)
+        self.screen.blit(undo,(250,30))
+        self.screen.blit(pointy, (250,10))
+        self.screen.blit(pointsvar, (250,30))
+
+        #pygame.display.flip()
 
     def getAllSprites(self):
         return allSprites
@@ -129,9 +135,14 @@ class Board:
         spr.screen.blit(pygame.transform.scale(reveal, (100,100)), (spr.rect.x, spr.rect.y))
         pygame.display.flip()
 
-#    def drawBoard(board):
+    def notRevealed(self,spr):
+        cover = pygame.image.load(coverphoto).convert_alpha()
+        cover = pygame.transform.scale(cover, (100,100)).convert_alpha()
+        spr.screen.blit(pygame.transform.scale(cover, (100,100)), (spr.rect.x, spr.rect.y))
+        #pygame.display.flip()
 
-         #background set up
+    def getImage(self, spr):
+        return spr.revealedImg
 
 def main():
     pygame.init()
@@ -143,6 +154,7 @@ def main():
     cursory = 0
     running = True
     #totalClicks = 0
+    numClicks = 0
     while running:
         if (screen.totalClicks == 20):
             running = False
@@ -151,14 +163,17 @@ def main():
             #easygui.msgbox("You're out of time! Your score was " + score, title = "Game Over!")
         else:
             ev = pygame.event.get()
-            numClicks = 0
+
+            #for s in
             for event in ev:
+                screen.printPoints()
                 if event.type == pygame.QUIT:
                     sys.exit()
                 elif event.type == pygame.MOUSEBUTTONUP:
+                    numClicks += 1
                     screen.totalClicks += 1
                     screen.printClicks()
-                    numClicks += 1
+                    #numClicks += 1
                     pos = pygame.mouse.get_pos()
                     clicked_sprites = [s for s in allSprites if s.rect.collidepoint(pos)]
                     s = clicked_sprites[0]
@@ -167,17 +182,21 @@ def main():
                     if numClicks == 1:
                         temp = s
                         posit = pos
-                    if numClicks == 2:
-                        numClicks = 0
-                        if temp == s:
+                    elif numClicks == 2:
+                        print('x')
+                        if screen.getImage(temp) == screen.getImage(s):
                             screen.points += 1
-                            s.isClicked = True
-                            temp.isClicked = True
-                            revealedBoxes.append(s)
-                            revealedBoxes.append(temp)
+                            screen.printPoints()
+                            screen.reveal(s)
+                            screen.reveal(temp)
+                            #revealedBoxes.append(s)
+                            #revealedBoxes.append(temp)
                         else:
-                            s.isClicked = False
-                            temp.isClicked = False
+                            Board()
+                            #screen.notRevealed(s)
+                            #screen.notRevealed(temp)
+                        numClicks = 0
+        pygame.display.flip()
 
 
 main()
