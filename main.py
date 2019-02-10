@@ -221,10 +221,10 @@ class Controller:
             if(self.play==True and (self.character.position==0 or self.character.position==3)):
                 self.character.position+=1
                 self.score+=ticTacToe.main()
-            elif(self.play==True and (self.character.position==1 or self.character.position==4)):
+            elif(self.play==True and self.character.position==1):
                 self.character.position+=1
                 self.score+=memorypuzzle.main()
-            elif(self.play==True and (self.character.position==2 or self.character.position==5)):
+            elif(self.play==True and (self.character.position==2 or self.character.position==5 or self.character.position==4)):
                 self.character.position+=1
                 self.score+=ticTacToe.main()
             self.character.moveAhead()
