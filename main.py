@@ -2,6 +2,8 @@ import pygame
 import character
 import time
 import ticTacToe
+import memorypuzzle
+
 
 BLACK    = (0, 0, 0)
 WHITE    = (255,255,255)
@@ -221,7 +223,7 @@ class Controller:
                 self.score+=ticTacToe.main()
             elif(self.play==True and (self.character.position==1 or self.character.position==4)):
                 self.character.position+=1
-                self.score+=ticTacToe.main()
+                self.score+=memorypuzzle.main()
             elif(self.play==True and (self.character.position==2 or self.character.position==5)):
                 self.character.position+=1
                 self.score+=ticTacToe.main()

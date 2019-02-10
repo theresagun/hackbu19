@@ -183,7 +183,6 @@ def main():
                         temp = s
                         posit = pos
                     elif numClicks == 2:
-                        print('x')
                         if screen.getImage(temp) == screen.getImage(s):
                             screen.points += 1
                             screen.printPoints()
