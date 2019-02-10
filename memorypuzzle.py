@@ -29,7 +29,7 @@ allSprites = pygame.sprite.Group()
 
 
 class Tile(pygame.sprite.Sprite):
-    def __init__(self, xCoor, yCoor):
+    def __init__(self, xCoor, yCoor, screen):
         super().__init__()
         pygame.init()
         self.image = pygame.image.load(coverphoto).convert_alpha()
@@ -38,35 +38,12 @@ class Tile(pygame.sprite.Sprite):
         self.rect.x = xCoor
         self.rect.y = yCoor
         self.revealed = False
-
-    def randomize(self):
-        mylist = [1, 1, 2, 2, 3, 3, 4 , 4, 5, 5, 6, 6]
-        random.shuffle(mylist)
-        board = []
-        revealedImg = coverphoto
-        for x in range(4):
-            column = []
-            for y in range(3):
-                if mylist[0] == 1:
-                    revealedImg = heart1
-                elif mylist[0] == 2:
-                    revealedImg = heart2
-                elif mylist[0] == 3:
-                    revealedImg = heart3
-                elif mylist[0] == 4:
-                    revealedImg = heart4
-                elif mylist[0] == 5:
-                    revealedImg = heart5
-                else:
-                    revealedImg = heart6
-                column.append(revealedImg)
-                del mylist[0]
-            board.append(column)
-        print(board)
-
-        #def getImage(spr):
-
-        #def reveal(spr):
+        self.revealedImg = pygame.image.load(heart1).convert_alpha()
+        self.isClicked = False
+        self.screen = screen
+        for spr in allSprites:
+            if spr.isClicked:
+                spr.reveal(spr)
 
 
 
@@ -95,14 +72,13 @@ class Board:
         for row in range(3):
             x = 10
             for col in range(4):
-                allSprites.add(Tile(x,y))
-                #left = box_x * (boxSize + gapSize) + xMargin
-                #top = box_y * (boxSize + gapSize) + yMargin
+                allSprites.add(Tile(x,y, self.screen))
                 x += 110
             y += 110
 
         allSprites.draw(self.screen)
         pygame.display.flip()
+
 
     def printClicks(self):
         #self.screen.fill(BGColor)
@@ -126,6 +102,32 @@ class Board:
     def getAllSprites(self):
         return allSprites
 
+    def randomize(self):
+        mylist = [1, 1, 2, 2, 3, 3, 4 , 4, 5, 5, 6, 6]
+        random.shuffle(mylist)
+        board = []
+        revealedImg = coverphoto
+        for spr in allSprites:
+            if mylist[0] == 1:
+                spr.revealedImg = heart1
+            elif mylist[0] == 2:
+                spr.revealedImg = heart2
+            elif mylist[0] == 3:
+                spr.revealedImg = heart3
+            elif mylist[0] == 4:
+                spr.revealedImg = heart4
+            elif mylist[0] == 5:
+                spr.revealedImg = heart5
+            else:
+                spr.revealedImg = heart6
+        #    column.append(revealedImg)
+            del mylist[0]
+
+    def reveal(self,spr):
+        reveal = pygame.image.load(spr.revealedImg).convert_alpha()
+        reveal = pygame.transform.scale(reveal, (100,100)).convert_alpha()
+        spr.screen.blit(pygame.transform.scale(reveal, (100,100)), (spr.rect.x, spr.rect.y))
+        pygame.display.flip()
 
 #    def drawBoard(board):
 
@@ -134,6 +136,7 @@ class Board:
 def main():
     pygame.init()
     screen = Board()
+    screen.randomize()
     #screen.drawBoard()
     #screen = pygame.display.set_mode([600,400])
     cursorx = 0
@@ -159,6 +162,8 @@ def main():
                     pos = pygame.mouse.get_pos()
                     clicked_sprites = [s for s in allSprites if s.rect.collidepoint(pos)]
                     s = clicked_sprites[0]
+                    #s.isClicked = True
+                    screen.reveal(s)
                     if numClicks == 1:
                         temp = s
                         posit = pos
@@ -166,10 +171,13 @@ def main():
                         numClicks = 0
                         if temp == s:
                             screen.points += 1
-                            s.revealed = True
-                            temp.revealed = True
-                            revealedBoxes.add(s)
-                            revealedBoxes.add(temp)
+                            s.isClicked = True
+                            temp.isClicked = True
+                            revealedBoxes.append(s)
+                            revealedBoxes.append(temp)
+                        else:
+                            s.isClicked = False
+                            temp.isClicked = False
 
 
 main()
