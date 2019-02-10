@@ -24,7 +24,7 @@ class Controller:
         self.score=0
         self.play=False
         self.lover="yourself"
-        self.loverPic="pair.jpg"
+        self.loverPic="zac.jpg"
 
 
 
@@ -44,11 +44,11 @@ class Controller:
             titleFont=pygame.font.SysFont("Calibri", 50, True, False)
             #title
             title=titleFont.render("MATCH MADE IN PYTHON", False, WHITE)
-            self.screen.blit(title, (80,385))
+            self.screen.blit(title, (120,385))
             #go to story
             directionFont=pygame.font.SysFont("Calibri", 30)
             directions=directionFont.render("PRESS ANY KEY TO START!", False, WHITE)
-            self.screen.blit(directions, (200,530))
+            self.screen.blit(directions, (220,530))
 
 
             pygame.display.flip()
@@ -68,7 +68,7 @@ class Controller:
             self.background = pygame.Surface(self.screen.get_size()).convert()
             ##self.background=pygame.image.load("storyBackground1.jpg")
             self.screen.blit(pygame.transform.scale(self.background, (800, 600)), (0,0))
-            self.background.fill((0, 0, 0))
+            #self.background.fill((0, 0, 0))
 
             file=open("story.txt", "r+")
             storyFont=pygame.font.SysFont("Lucida Handwriting", 23)
@@ -166,6 +166,7 @@ class Controller:
                     if event.key==pygame.K_SPACE:
                         #ticTacToe.main()
                         self.play=True
+                        #self.character.moveAhead()
 
             self.screen=pygame.display.set_mode((1000, 700))
             #self.character.moveAhead()
@@ -223,16 +224,42 @@ class Controller:
 
 
             if(self.play==True and (self.character.position==0 or self.character.position==3)):
-            #if(self.play==True):
-                print("hello")
+                print(self.character.position)
+                self.character.position+=1
                 self.score=ticTacToe.main()
-
 #            elif(self.play==True and self.character.position==1 self.character.position==4):
 #                self.score=trivia.main()
 #            elif(self.play==True and self.character.position==2 self.character.position==5):
 #                self.score=trivia.main()
-
+            self.character.moveAhead()
             self.play=False
+
+            if(self.score>=0 and self.score<=2):
+                if(self.character.gender==0):
+                    self.lover="Shrek"
+                    self.loverPic="shrek.jpg"
+                else:
+                    self.lover="Fiona"
+                    self.loverPic="fiona.jpg"
+            elif(self.score>2 and self.score<=4):
+                if(self.character.gender==0):
+                    self.lover="Ed Sheeran"
+                    self.loverPic="ed.jpg"
+                else:
+                    self.lover="Katy Perry"
+                    self.loverPic="katy.jpg"
+            elif(self.score>4 and self.score<=6):
+                if(self.character.gender==0):
+                    self.lover="Zac Efron"
+                    self.loverPic="zac.jpg"
+                else:
+                    self.lover="Blake Lively"
+                    self.loverPic="blake.jpg"
+
+
+            if(self.character.position==5):
+                self.endScreen()
+
             pygame.display.flip()
 
         pygame.quit()
@@ -243,9 +270,6 @@ class Controller:
             for event in pygame.event.get():
                 if event.type==pygame.QUIT:
                     end=False
-
-
-
 
             self.screen=pygame.display.set_mode((self.width, self.height-50))
             self.background=pygame.image.load("endScreen.jpg")

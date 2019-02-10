@@ -12,7 +12,7 @@ class Character():
         self.bgPic="heart1.gif"
 
     def moveAhead(self):
-        self.position+=1
+        #self.position+=1
         if(self.position==0):
             self.bgPic="heart1.gif"
             self.rect.x=450
@@ -37,30 +37,3 @@ class Character():
             self.bgPic="heart15.gif"
             self.rect.x=620
             self.rect.y=0
-        #if(self.position==1)
-
-
-'''
-    def moveAhead(self):
-        self.postion++
-        if(self.postion==1):
-            self.rect.x=300
-            self.rect.y=50
-
-
-        elif(self.postion==2):
-            self.rect.x=50
-            self.rect.y=300
-        elif(self.postion==3):
-            self.rect.x=300
-            self.rect.y=500
-        elif(self.postion==4):
-            self.rect.x=600
-            self.rect.y=300
-        elif(self.postion==5):
-            self.rect.x=50
-            self.rect.y=100
-        elif(self.postion==6):
-            self.rect.x=420
-            self.rect.y=100
-            '''
