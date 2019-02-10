@@ -198,25 +198,37 @@ def main():
     while(kateSmells):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                kateSmells = False
+                sys.exit()
+            elif event.type == pygame.KEYDOWN:
+                return end
         #make screen
         screen = pygame.display.set_mode([400,400])
         screen.fill([255,105,180])
 
         #words!
         endFont = pygame.font.SysFont('Calibri',40,True,False)
+        dir = pygame.font.SysFont('Calibri',40,True,False)
+        dir2 = pygame.font.SysFont('Calibri',40,True,False)
+
         if end == PLAYER_WIN:
             endFont = endFont.render('YOU WON', False, (255,255,255))
         elif end == NPC_WIN:
             endFont = endFont.render('YOU LOST', False, (255,255,255))
         else:
             endFont = endFont.render('TIE GAME', False, (255,255,255))
+        dir = dir.render('Press any key', False, (255,255,255))
+        dir2 = dir2.render('to continue', False, (255,255,255))
         #put on screen
         width = endFont.get_width()
         wCoor = (400 - width) / 2
         height = endFont.get_height()
         hCoor = (400 - height) / 2
         screen.blit(endFont, (wCoor,hCoor))
+        width = dir.get_width()
+        wCoor = (400 - width) / 2
+        width = dir2.get_width()
+        wCoor = (400 - width) / 2
+        screen.blit(dir2, (wCoor, hCoor + 100))
 
         pygame.display.flip()
 
